@@ -30,7 +30,7 @@ def main():
     # Get credentials and create an API client
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
         client_secrets_file, scopes)
-    credentials = flow.run_console()
+    credentials = flow.run_console() #still working on how to bypass OAUTH2
     youtube = googleapiclient.discovery.build(
         api_service_name, api_version, credentials=credentials)
 
@@ -40,6 +40,7 @@ def main():
     )
     response_trump = request_trump.execute()
     
+    #add candidate and captions
     for i in range(len(trump_new)):
         response_trump['items'][i]['candidate'] = 'trump'
         response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
