@@ -3,7 +3,10 @@
 #SBATCH -t 01:00:00
 #SBATCH -o yt_speeches.out
 #SBATCH -p standard
-#SBATCH -A mygroup
+#SBATCH -A speech-capstone
+
+module load singularity
+
 
 module load anaconda3
 
@@ -12,3 +15,5 @@ python youtube_automation.py
 
 # reschedule for the next day
 sbatch youtube.slurm
+
+
