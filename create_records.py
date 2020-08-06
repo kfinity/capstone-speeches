@@ -8,53 +8,77 @@ Created on Wed Jul 22 21:56:18 2020
 
 from youtube_transcript_api import YouTubeTranscriptApi
 import os
-import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from google.oauth2 import service_account
+from youtube_search import bidenID, trumpID
+import json
+import datetime
 
-scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+#Read in existing JSON, or create if JSON does not exist
+if os.path.isfile("speeches.json"):
+    speeches=json.load(open('speeches.json'))
+else:
+    speeches={}
 
-#Test video IDs. These will need to be updated with video IDs from a search script
-biden_new=['i5S1jqeQOaU']
-trump_new=['jDaEM46_twk','mXD4zPY4Ai0']
+SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
 
-def main():
+#Read in video IDs from youtube_search.py
+biden_new=[bidenID]
+trump_new=[trumpID]
+
+
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-    api_service_name = "youtube"
-    api_version = "v3"
-    client_secrets_file = "client_secret.json"
+api_service_name = "youtube"
+api_version = "v3"
+service_account_file = 'service_account.json'
 
     # Get credentials and create an API client
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-        client_secrets_file, scopes)
-    credentials = flow.run_console() #still working on how to bypass OAUTH2
-    youtube = googleapiclient.discovery.build(
+credentials = service_account.Credentials.from_service_account_file(
+        service_account_file, scopes=SCOPES)
+youtube = googleapiclient.discovery.build(
         api_service_name, api_version, credentials=credentials)
 
+if not trump_new:
+    pass
+else:
+    #Get metadata
     request_trump = youtube.videos().list(
-        part="snippet,contentDetails,statistics",
-        id=trump_new
-    )
+            part="snippet,contentDetails,statistics",
+            id=trump_new
+        )
     response_trump = request_trump.execute()
-    
+        
     #add candidate and captions
     for i in range(len(trump_new)):
         response_trump['items'][i]['candidate'] = 'trump'
         response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
         
+    #add to dictionary with a unique key    
+    speeches[datetime.date.today().isoformat()+'_t']=response_trump    
+
+if not biden_new:
+    pass
+else: 
+    #Get metadata       
     request_biden = youtube.videos().list(
-        part="snippet,contentDetails,statistics",
-        id=biden_new
-    )
+            part="snippet,contentDetails,statistics",
+            id=biden_new
+        )
     response_biden = request_biden.execute()
-    
+        
+    #add candidate and captions
     for i in range(len(biden_new)):
         response_biden['items'][i]['candidate'] = 'biden'
         response_biden['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(biden_new[i])
-
-if __name__ == "__main__":
-    main()
     
+    #add to dictionary with a unique key
+    speeches[datetime.date.today().isoformat()+'_b']=response_biden
+
+#write JSON file
+with open('speeches.json', 'w') as outfile:
+     json.dump(speeches, outfile, sort_keys = True, indent = 4,
+               ensure_ascii = False)
