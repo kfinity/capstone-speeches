@@ -27,7 +27,6 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
 biden_new=[bidenID]
 trump_new=[trumpID]
 
-
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -42,7 +41,7 @@ credentials = service_account.Credentials.from_service_account_file(
 youtube = googleapiclient.discovery.build(
         api_service_name, api_version, credentials=credentials)
 
-if not trump_new:
+if trump_new == [None]:
     pass
 else:
     #Get metadata
@@ -60,7 +59,7 @@ else:
     #add to dictionary with a unique key    
     speeches[datetime.date.today().isoformat()+'_t']=response_trump    
 
-if not biden_new:
+if biden_new == [None]:
     pass
 else: 
     #Get metadata       
