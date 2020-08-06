@@ -13,13 +13,12 @@ import googleapiclient.errors
 from google.oauth2 import service_account
 from youtube_search import bidenID, trumpID
 import json
-import datetime
 
 #Read in existing JSON, or create if JSON does not exist
 if os.path.isfile("speeches.json"):
     speeches=json.load(open('speeches.json'))
 else:
-    speeches={}
+    speeches=[]
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
 
@@ -56,8 +55,8 @@ else:
         response_trump['items'][i]['candidate'] = 'trump'
         response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
         
-    #add to dictionary with a unique key    
-    speeches[datetime.date.today().isoformat()+'_t']=response_trump    
+    #add to json
+    speeches.append(response_trump)
 
 if biden_new == [None]:
     pass
@@ -74,8 +73,8 @@ else:
         response_biden['items'][i]['candidate'] = 'biden'
         response_biden['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(biden_new[i])
     
-    #add to dictionary with a unique key
-    speeches[datetime.date.today().isoformat()+'_b']=response_biden
+    #add to json
+    speeches.append(response_biden)
 
 #write JSON file
 with open('speeches.json', 'w') as outfile:
