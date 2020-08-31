@@ -10,7 +10,7 @@
 # you can check on the progress with "squeue | grep youtube"
 
 # needed to make sure you have the right environment set up.
-module load anaconda
+module load anaconda/2019.10-py3.7
 
 # pull down the videos, save them
 python create_records.py
