@@ -1,1 +1,18 @@
-Submitted batch job 14700890
+Traceback (most recent call last):
+  File "create_records.py", line 56, in <module>
+    response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
+  File "/home/kf2tg/.local/lib/python3.7/site-packages/youtube_transcript_api/_api.py", line 128, in get_transcript
+    return cls.list_transcripts(video_id, proxies, cookies).find_transcript(languages).fetch()
+  File "/home/kf2tg/.local/lib/python3.7/site-packages/youtube_transcript_api/_api.py", line 70, in list_transcripts
+    return TranscriptListFetcher(http_client).fetch(video_id)
+  File "/home/kf2tg/.local/lib/python3.7/site-packages/youtube_transcript_api/_transcripts.py", line 34, in fetch
+    self._extract_captions_json(self._fetch_html(video_id), video_id)
+  File "/home/kf2tg/.local/lib/python3.7/site-packages/youtube_transcript_api/_transcripts.py", line 42, in _extract_captions_json
+    raise VideoUnavailable(video_id)
+youtube_transcript_api._errors.VideoUnavailable: 
+Could not retrieve a transcript for the video https://www.youtube.com/watch?v=gQi_sJxTtKA! This is most likely caused by:
+
+The video is no longer available
+
+If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Submitted batch job 14763391
