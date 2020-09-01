@@ -48,7 +48,7 @@ request = youtube.search().list(
         videoDuration="long"
     )
 biden = request.execute()
-
+print("Ran Biden request - 100 units")
 
 #Trump Search
 request = youtube.search().list(
@@ -63,7 +63,7 @@ request = youtube.search().list(
         videoDuration="long"
     )
 trump = request.execute()
-
+print("Ran Trump request - 100 units")
 
 #Extract video IDs to be pulled by create_records.py
 biden_title = biden['items'][0]['snippet']['title'].lower()

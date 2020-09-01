@@ -7,6 +7,7 @@ Created on Wed Jul 22 21:56:18 2020
 """
 
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound, VideoUnavailable
 import os
 import googleapiclient.discovery
 import googleapiclient.errors
@@ -34,7 +35,7 @@ api_service_name = "youtube"
 api_version = "v3"
 service_account_file = 'service_account.json'
 
-    # Get credentials and create an API client
+# Get credentials and create an API client
 credentials = service_account.Credentials.from_service_account_file(
         service_account_file, scopes=SCOPES)
 youtube = googleapiclient.discovery.build(
@@ -49,11 +50,19 @@ else:
             id=trump_new
         )
     response_trump = request_trump.execute()
+    print("Ran Trump request - 1 unit")
         
     #add candidate and captions
     for i in range(len(trump_new)):
-        response_trump['items'][i]['candidate'] = 'trump'
-        response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
+        try:
+            response_trump['items'][i]['candidate'] = 'trump'
+            response_trump['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(trump_new[i])
+        except TranscriptsDisabled:
+            print("Transcripts disabled for video: %s" % trump_new[i])
+        except NoTranscriptFound:
+            print("No transcript found for video: %s" % trump_new[i])
+        except VideoUnavailable:
+            print("Video no longer available: %s" % trump_new[i])
         
     #add to json
     speeches.append(response_trump)
@@ -67,11 +76,19 @@ else:
             id=biden_new
         )
     response_biden = request_biden.execute()
+    print("Ran Biden request - 1 unit")
         
     #add candidate and captions
     for i in range(len(biden_new)):
-        response_biden['items'][i]['candidate'] = 'biden'
-        response_biden['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(biden_new[i])
+        try:
+            response_biden['items'][i]['candidate'] = 'biden'
+            response_biden['items'][i]['captions'] = YouTubeTranscriptApi.get_transcript(biden_new[i])
+        except TranscriptsDisabled:
+            print("Transcripts disabled for video: %s" % biden_new[i])
+        except NoTranscriptFound:
+            print("No transcript found for video: %s" % biden_new[i])
+        except VideoUnavailable:
+            print("Video no longer available: %s" % biden_new[i])
     
     #add to json
     speeches.append(response_biden)
