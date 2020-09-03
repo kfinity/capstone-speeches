@@ -65,9 +65,41 @@ request = youtube.search().list(
 trump = request.execute()
 print("Ran Trump request - 100 units")
 
+#Harris Search
+request = youtube.search().list(
+        part="snippet",
+        maxResults=1,
+        publishedAfter=daybefore_rfc3339,
+        publishedBefore=yesterday_rfc3339,
+        q="harris full -pence",
+        topicId="/m/05qt0",
+        type="video",
+        videoCaption="videoCaptionUnspecified",
+        videoDuration="long"
+    )
+harris = request.execute()
+print("Ran Harris request - 100 units")
+
+#Pence Search
+request = youtube.search().list(
+        part="snippet",
+        maxResults=1,
+        publishedAfter=daybefore_rfc3339,
+        publishedBefore=yesterday_rfc3339,
+        q="pence full -harris",
+        topicId="/m/05qt0",
+        type="video",
+        videoCaption="videoCaptionUnspecified",
+        videoDuration="long"
+    )
+pence = request.execute()
+print("Ran Pence request - 100 units")
+
 #Extract video IDs to be pulled by create_records.py
 biden_title = biden['items'][0]['snippet']['title'].lower()
 trump_title = trump['items'][0]['snippet']['title'].lower()
+harris_title = harris['items'][0]['snippet']['title'].lower()
+pence_title = pence['items'][0]['snippet']['title'].lower()
 
 #Do not add video if title seems to not be a speech
 if 'biden' in biden_title and 'full' in biden_title:
@@ -78,3 +110,11 @@ if 'trump' in trump_title and 'full' in trump_title:
     trumpID = trump['items'][0]['id']['videoId']
 else:
     trumpID=None
+if 'harris' in harris_title and 'full' in harris_title:
+    harrisID = harris['items'][0]['id']['videoId']
+else:
+    harrisID=None
+if 'pence' in pence_title and 'full' in pence_title:
+    penceID = pence['items'][0]['id']['videoId']
+else:
+    penceID=None
