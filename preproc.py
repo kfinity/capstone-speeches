@@ -15,13 +15,15 @@ import nltk
 
 # Given the full JSON contents of our "speeches.json" file, return a dataframe
 def create_bow(json):
-    df=pd.DataFrame(columns=['id','speaker','date','speech','title'])
+    json=tag_interviews(json)
+    df=pd.DataFrame(columns=['id','speaker','date','speech','title','transcript_type'])
     for i in range(len(json)): # for each entry...
         for k in range(len(json[i]['items'])): #for each speech...
             id = json[i]['items'][k]['id']
             speaker = json[i]['items'][k]['candidate']
             date = json[i]['items'][k]['snippet']['publishedAt']
             title = json[i]['items'][k]['snippet']['title']
+            transcript_type = json[i]['items'][k]['type']
             try:
                 captions = json[i]['items'][k]['captions']
             except KeyError:
@@ -29,7 +31,7 @@ def create_bow(json):
             if captions != None:
                 just_text = [j['text'] for j in captions]
                 speech = ' '.join(just_text)
-            row = {"id": id, "speaker": speaker, "date": date, "speech":speech, "title":title}
+            row = {"id": id, "speaker": speaker, "date": date, "speech":speech, "title":title,"transcript_type": transcript_type}
             df = df.append(row,ignore_index=True)
     
     # drop speeches with no transcript
