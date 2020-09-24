@@ -93,3 +93,34 @@ def create_tfidf(token,bag,count_method='n',tf_method='sum',idf_method='standard
     TFIDF = TF * IDF
     return TFIDF
 
+#Identify which speeches are interviews
+def find_interviews(json):
+    videoIDs = []
+    for i in range(len(json)): # for each entry...
+        for k in range(len(json[i]['items'])): #for each speech...
+            if 'interview' in json[i]['items'][k]['snippet']['title'].lower():
+                videoIDs.append(json[i]['items'][k]['id'])
+            else:
+                pass
+    return videoIDs
+
+def tag_interviews(json):
+    interviews = find_interviews(json)
+    for i in range(len(json)): # for each entry...
+        for k in range(len(json[i]['items'])): #for each speech...
+            if json[i]['items'][k]['id'] in interviews:
+                json[i]['items'][k]['type'] = 'interview'
+            else:
+                json[i]['items'][k]['type'] = 'speech'
+    return json
+
+def remove_speech(videoID, json):
+    for i in range(len(json)): # for each entry...
+        for k in range(len(json[i]['items'])): #for each speech...
+            if json[i]['items'][k]['id'] == videoID:
+                del json[i]['items'][k]
+                break
+        else:
+            continue
+        break
+    print("Don't forget to save your new json!")

@@ -42,7 +42,6 @@ request = youtube.search().list(
         publishedAfter=daybefore_rfc3339,
         publishedBefore=yesterday_rfc3339,
         q="biden full -trump",
-        topicId="/m/05qt0",
         type="video",
         videoCaption="videoCaptionUnspecified",
         videoDuration="long"
@@ -57,7 +56,6 @@ request = youtube.search().list(
         publishedAfter=daybefore_rfc3339,
         publishedBefore=yesterday_rfc3339,
         q="trump full -biden",
-        topicId="/m/05qt0",
         type="video",
         videoCaption="videoCaptionUnspecified",
         videoDuration="long"
@@ -72,7 +70,6 @@ request = youtube.search().list(
         publishedAfter=daybefore_rfc3339,
         publishedBefore=yesterday_rfc3339,
         q="harris full -pence",
-        topicId="/m/05qt0",
         type="video",
         videoCaption="videoCaptionUnspecified",
         videoDuration="long"
@@ -87,7 +84,6 @@ request = youtube.search().list(
         publishedAfter=daybefore_rfc3339,
         publishedBefore=yesterday_rfc3339,
         q="pence full -harris",
-        topicId="/m/05qt0",
         type="video",
         videoCaption="videoCaptionUnspecified",
         videoDuration="long"
@@ -102,19 +98,19 @@ harris_title = harris['items'][0]['snippet']['title'].lower()
 pence_title = pence['items'][0]['snippet']['title'].lower()
 
 #Do not add video if title seems to not be a speech
-if 'biden' in biden_title and 'full' in biden_title:
+if 'biden' in biden_title:
     bidenID = biden['items'][0]['id']['videoId']
 else:
     bidenID=None
-if 'trump' in trump_title and 'full' in trump_title:
+if 'trump' in trump_title:
     trumpID = trump['items'][0]['id']['videoId']
 else:
     trumpID=None
-if 'harris' in harris_title and 'full' in harris_title:
+if 'harris' in harris_title:
     harrisID = harris['items'][0]['id']['videoId']
 else:
     harrisID=None
-if 'pence' in pence_title and 'full' in pence_title:
+if 'pence' in pence_title:
     penceID = pence['items'][0]['id']['videoId']
 else:
     penceID=None
