@@ -88,9 +88,9 @@ def write():
     st.write("""
     ## Sentiment Analysis
     """)
-    Sentiment = pd.read_csv('sentiment.csv')\
-        .rename(columns={'Unnamed: 0': 'emotion', '0': 'value'})\
-        .set_index('emotion')
+    Sentiment = pd.read_csv('sentiment.csv').set_index('id').loc[videoresult,:]\
+        .to_frame()
+    Sentiment.columns = ["value"]
     fig, ax = plt.subplots()
-    Sentiment.plot.barh(ax=ax)
+    Sentiment.sort_values('value').plot.barh(ax=ax)
     st.pyplot(fig)
