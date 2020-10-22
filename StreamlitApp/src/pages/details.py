@@ -5,6 +5,7 @@ import numpy as np
 import json
 import nltk
 import seaborn as sns
+import matplotlib.pyplot as plt
 from IPython.core.display import display, HTML
 sns.set()
 
@@ -47,36 +48,49 @@ def write():
 
 #Filters to select speeches
 
-    c_picker = st.selectbox('Candidate:', speech['speaker'].unique(), index=0)
-    c_picker2 = st.selectbox('Speech:', speech['title'], index=0)
+    c_picker = st.selectbox('Candidate:', speech['speaker'].unique())
+    fspeech = speech.loc[speech['speaker']==c_picker,:].reset_index(drop=True)
+    c_picker2 = st.selectbox('Speech:', fspeech['title'])
 
 # YouTube embedded video
 
-    videoresult = speech.loc[(speech['title'] == c_picker2), 'id'].iloc[0]
+    videoresult = fspeech.loc[(fspeech['title'] == c_picker2), 'id'].iloc[0]
     st.video('https://youtu.be/'+str(videoresult))
 
 # API Transcript readout
 
-    selectspeech = speech.loc[(speech['title'] == c_picker2), 'speech'].iloc[0]
-    st.write(speech['speech'])
+    selectspeech = fspeech.loc[(fspeech['title'] == c_picker2), 'speech'].iloc[0]
+    st.write("""
+    ## Speech Transcript
+    """)
+    st.text_area("",value=selectspeech, height=200)
+
 
 # Sentiment Analysis
 
-    salex_csv = 'salex_nrc.csv'
-    nrc_cols = "nrc_negative nrc_positive nrc_anger nrc_anticipation nrc_disgust nrc_fear nrc_joy nrc_sadness nrc_surprise nrc_trust".split()
-    emo = 'polarity'
+    #salex_csv = 'salex_nrc.csv'
+    #nrc_cols = "nrc_negative nrc_positive nrc_anger nrc_anticipation nrc_disgust nrc_fear nrc_joy nrc_sadness nrc_surprise nrc_trust".split()
+    #emo = 'polarity'
 
-    salex = pd.read_csv(salex_csv).set_index('term_str')
-    salex.columns = [col.replace('nrc_','') for col in salex.columns]
-    salex['polarity'] = salex.positive - salex.negative
+    #salex = pd.read_csv(salex_csv).set_index('term_str')
+    #salex.columns = [col.replace('nrc_','') for col in salex.columns]
+    #salex['polarity'] = salex.positive - salex.negative
 
-    emo_cols = "anger anticipation disgust fear joy sadness surprise trust polarity".split()
+    #emo_cols = "anger anticipation disgust fear joy sadness surprise trust polarity".split()
 
-    TOKEN = tokenize(speech)
-    TOKEN = TOKEN.join(salex, on='term_str', how='left')
-    TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
+    #TOKEN = tokenize(speech)
+    #TOKEN = TOKEN.join(salex, on='term_str', how='left')
+    #TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
 
-    TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
-    Sentiment = TOKEN.loc[speech['id']].copy()
-    Sentiment[emo_cols].mean().sort_values().plot.barh()
-    st.pyplot()
+    #TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
+    #Sentiment = TOKEN.loc[speech['id']].copy()
+    #Sentiment[emo_cols].mean().sort_values().plot.barh()
+    st.write("""
+    ## Sentiment Analysis
+    """)
+    Sentiment = pd.read_csv('sentiment.csv')\
+        .rename(columns={'Unnamed: 0': 'emotion', '0': 'value'})\
+        .set_index('emotion')
+    fig, ax = plt.subplots()
+    Sentiment.plot.barh(ax=ax)
+    st.pyplot(fig)
