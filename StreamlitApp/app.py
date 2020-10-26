@@ -3,15 +3,12 @@ import streamlit as st
 import utils.display as udisp
 
 import src.pages.home
-#import src.pages.about
 import src.pages.summary
-import src.pages.details
 import src.pages.data
 
 MENU = {
     "Home" : src.pages.home,
     "Speeches Summary" : src.pages.summary,
-    "Speeches Details" : src.pages.details,
     "Data" : src.pages.data
 }
 
@@ -43,7 +40,7 @@ def main():
         Ramit Garg (rkg4u@virginia.edu)
         """
     )
-    st.sidebar.image('uvads.jpg', use_column_width=True)
+    st.sidebar.image('StreamlitApp/uvads.jpg', use_column_width=True)
 
 if __name__ == "__main__":
     main()

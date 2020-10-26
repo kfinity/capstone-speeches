@@ -1,4 +1,5 @@
 .*
 __*
 **/__pycache__
+service_account*
 !.gitignore

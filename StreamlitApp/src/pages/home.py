@@ -1,11 +1,9 @@
 import streamlit as st
-import SessionState
 import pathlib
 import utils.display as udisp
 import pandas as pd
 import numpy as np
 import json
-import nltk
 import seaborn as sns
 import matplotlib.pyplot as plt
 from IPython.core.display import display, HTML
@@ -13,7 +11,7 @@ sns.set()
 from PIL import Image
 
 def import_speeches():
-        speech = pd.read_csv('speeches.csv') # calculated in top_tfidf_with_ngrams.ipynb
+        speech = pd.read_csv('data/speeches.csv') # calculated in top_tfidf_with_ngrams.ipynb
         return speech
 
 #data_load_state = st.text('Loading data...')
@@ -29,7 +27,7 @@ app_state = st.experimental_get_query_params()
 
 
 def write():
-    image = Image.open('TitleBanner.jpg')
+    image = Image.open('StreamlitApp/TitleBanner.jpg')
     st.image(image, caption='The 2020 US Presidential Election Campaign Speeches', use_column_width=True)
 
     st.markdown("""
@@ -70,7 +68,7 @@ def write():
 
     # 3 most similar
 
-    sim = pd.read_csv('speech_similarity.csv') # calculated in top_tfidf_with_ngrams.ipynb
+    sim = pd.read_csv('data/speech_similarity.csv') # calculated in top_tfidf_with_ngrams.ipynb
     # for just the current speech, locate the top 3 
     sim3 = sim.set_index('id').loc[videoresult].sort_values(ascending=False)[1:4].to_dict().items()
     # print them
@@ -95,7 +93,7 @@ def write():
     ## Sentiment Analysis
     """)
     # file generated in create_sentiment.ipynb
-    Sentiment = pd.read_csv('sentiment.csv').set_index('id').loc[videoresult,:]\
+    Sentiment = pd.read_csv('data/sentiment.csv').set_index('id').loc[videoresult,:]\
         .to_frame()
     Sentiment.columns = ["value"]
     fig, ax = plt.subplots()
