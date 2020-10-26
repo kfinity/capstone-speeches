@@ -14,9 +14,12 @@ MENU = {
     "About the Project" : src.pages.about
 }
 
+app_state = st.experimental_get_query_params()
+app_state = {k: v[0] if isinstance(v, list) else v for k, v in app_state.items()}
+
 def main():
     st.sidebar.title("Menu Options")
-    menu_selection = st.sidebar.radio("Choose your option...", list(MENU.keys()))
+    menu_selection = st.sidebar.radio("", list(MENU.keys()))
 
     menu = MENU[menu_selection]
 
@@ -26,9 +29,20 @@ def main():
     st.sidebar.info(
         "https://github.com/kfinity/capstone-speeches"
     )
-    st.sidebar.info(
-        "capstone-speeches/StreamlitApp"
+    st.sidebar.markdown(
+        """
+        ## About 
+
+        This site is the result of a capstone project for UVA MSDS students:
+
+        Kevin Finity (kf2tg@virginia.edu)
+
+        Max McGaw (mm9tk@virginia.edu)
+
+        Ramit Garg (rkg4u@virginia.edu)
+        """
     )
+    st.sidebar.image('uvads.jpg', use_column_width=True)
 
 if __name__ == "__main__":
     main()
