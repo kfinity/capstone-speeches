@@ -12,25 +12,8 @@ from IPython.core.display import display, HTML
 sns.set()
 from PIL import Image
 
-# local library
-from preproc import *
-
-@st.cache
-def load_speeches():
-	with open('speeches.json',encoding='utf-8') as f:
-		speeches = json.load(f)
-		return speeches
-
-@st.cache
-def load_bow():
-	bow = create_bow(speeches)
-	return bow
-
-def export_speeches():
-        bow.to_csv('speeches.csv', index=True)
-
 def import_speeches():
-        speech = pd.read_csv('speeches.csv')
+        speech = pd.read_csv('speeches.csv') # calculated in top_tfidf_with_ngrams.ipynb
         return speech
 
 #data_load_state = st.text('Loading data...')
@@ -80,12 +63,25 @@ def write():
 
     c_picker2 = st.selectbox('Speech:', fspeech['title']) #, index=default_speech)
 
-# YouTube embedded video
+    # YouTube embedded video
 
     videoresult = fspeech.loc[(fspeech['title'] == c_picker2), 'id'].iloc[0]
     st.video('https://youtu.be/'+str(videoresult))
 
-# API Transcript readout
+    # 3 most similar
+
+    sim = pd.read_csv('speech_similarity.csv') # calculated in top_tfidf_with_ngrams.ipynb
+    # for just the current speech, locate the top 3 
+    sim3 = sim.set_index('id').loc[videoresult].sort_values(ascending=False)[1:4].to_dict().items()
+    # print them
+    st.markdown("## 3 most similar speeches")
+    for (vid,score) in sim3:
+        title = speech.loc[(speech['id'] == vid), 'title'].values
+        if len(title) > 0:
+            st.markdown("**{}**".format(title[0]))
+            st.markdown("({:4.3f} similarity) [Watch it on YouTube](https://youtu.be/{})".format(score, vid))
+
+    # API Transcript readout
 
     selectspeech = fspeech.loc[(fspeech['title'] == c_picker2), 'speech'].iloc[0]
     st.write("""
@@ -93,28 +89,12 @@ def write():
     """)
     st.text_area("",value=selectspeech, height=200)
 
-# Sentiment Analysis
+    # Sentiment Analysis
 
-    #salex_csv = 'salex_nrc.csv'
-    #nrc_cols = "nrc_negative nrc_positive nrc_anger nrc_anticipation nrc_disgust nrc_fear nrc_joy nrc_sadness nrc_surprise nrc_trust".split()
-    #emo = 'polarity'
-
-    #salex = pd.read_csv(salex_csv).set_index('term_str')
-    #salex.columns = [col.replace('nrc_','') for col in salex.columns]
-    #salex['polarity'] = salex.positive - salex.negative
-
-    #emo_cols = "anger anticipation disgust fear joy sadness surprise trust polarity".split()
-
-    #TOKEN = tokenize(speech)
-    #TOKEN = TOKEN.join(salex, on='term_str', how='left')
-    #TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
-
-    #TOKEN[emo_cols] = TOKEN[emo_cols].fillna(0)
-    #Sentiment = TOKEN.loc[speech['id']].copy()
-    #Sentiment[emo_cols].mean().sort_values().plot.barh()
     st.write("""
     ## Sentiment Analysis
     """)
+    # file generated in create_sentiment.ipynb
     Sentiment = pd.read_csv('sentiment.csv').set_index('id').loc[videoresult,:]\
         .to_frame()
     Sentiment.columns = ["value"]
@@ -122,5 +102,6 @@ def write():
     Sentiment.sort_values('value').plot.barh(ax=ax)
     ax.get_legend().remove()
     st.pyplot(fig)    
+
 
 

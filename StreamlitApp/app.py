@@ -3,22 +3,23 @@ import streamlit as st
 import utils.display as udisp
 
 import src.pages.home
-import src.pages.about
+#import src.pages.about
 import src.pages.summary
 import src.pages.details
+import src.pages.data
 
 MENU = {
     "Home" : src.pages.home,
     "Speeches Summary" : src.pages.summary,
     "Speeches Details" : src.pages.details,
-    "About the Project" : src.pages.about
+    "Data" : src.pages.data
 }
 
 app_state = st.experimental_get_query_params()
 app_state = {k: v[0] if isinstance(v, list) else v for k, v in app_state.items()}
 
 def main():
-    st.sidebar.title("Menu Options")
+    st.sidebar.title("Navigation")
     menu_selection = st.sidebar.radio("", list(MENU.keys()))
 
     menu = MENU[menu_selection]
