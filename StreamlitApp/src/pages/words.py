@@ -20,9 +20,9 @@ speech = import_speeches()
 def write():
     
     st.write("""
-    # US Presidential Election Campaign Speeches
+# US Presidential Election Campaign Speeches
 
-    ## The Words
+## The Words
 
 Exploring the words of the speeches, using TF-IDF and other tools.
 
