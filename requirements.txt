@@ -1,7 +1,7 @@
+streamlit==0.69.2
 seaborn==0.10.1
 pandas==1.0.5
-numpy==1.18.5
-streamlit==0.69.2
 matplotlib==3.2.2
+numpy==1.18.5
 ipython==7.16.1
 Pillow==8.0.1

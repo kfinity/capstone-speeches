@@ -5,10 +5,12 @@ import utils.display as udisp
 import src.pages.home
 import src.pages.summary
 import src.pages.data
+import src.pages.words
 
 MENU = {
     "Home" : src.pages.home,
     "Speeches Summary" : src.pages.summary,
+    "The Words" : src.pages.words,
     "Data" : src.pages.data
 }
 
