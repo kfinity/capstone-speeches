@@ -24,11 +24,14 @@ def write():
 
     ## The Words
 
-    Exploring the words of the speeches, using TF-IDF and other tools.
+Exploring the words of the speeches, using TF-IDF and other tools.
 
     """)
 
     st.write("## TF-IDF")
+    st.write("""[Term frequency–inverse document frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) is a popular way to weight the words in a text document (like a speech) by how often they occur. This helps highlight words which occur *uncommonly often* in a specific speech. """)
+
+    st.write("""We can also aggregate the TFIDF scores by speaker to look at common words each speaker uses.""")
 
     tfidf_speaker = pd.read_csv('data/tfidf_speaker.csv')
     top10 = pd.DataFrame(tfidf_speaker.sort_values('biden', ascending=False).head(10)[['index']].values)
@@ -52,6 +55,31 @@ By contrast, the Biden and Harris speeches have a wide spread, as do the Trump i
         pca1_str = pca1.read()
         components.html(pca1_str, height=500)
 
+    st.write("""### PCA Loadings
+
+The *loadings* for the principal components show us how much each term contributes to the vector. So we can look at the top words associated with different directions in the PCA plot.""")
+
+    loadings = pd.read_csv('data/loadings.csv')
+    pc5 = pd.DataFrame(loadings.sort_values('0').tail(5)['term'])
+    pc5.columns=['Right (PC0 positive)']
+    pc5['Left (PC0 negative)'] = loadings.sort_values('0').head(5)['term'].values
+    pc5['Up (PC1 positive)'] = loadings.sort_values('1').tail(5)['term'].values
+    pc5['Down (PC1 negative)'] = loadings.sort_values('1').head(5)['term'].values
+    pc5 = pc5.T
+    pc5.columns = ['#1','#2','#3','#4','#5']
+    st.write(pc5)
+
+    st.write("""We can also look at the top loaded words for each quadrant - the lower left (Trump rallies), lower right (Pence speeches), upper left, and upper right.""")
+
+    top10 = pd.DataFrame(loadings.sort_values('trump_rally', ascending=False).head(10)[['term']].values)
+    top10.columns = ['Lower left']
+    top10['Lower right'] = loadings.sort_values('pence', ascending=False).head(10)[['term']].values
+    top10['Upper left'] = loadings.sort_values('interviews', ascending=False).head(10)[['term']].values
+    top10['Upper right'] = loadings.sort_values('formal', ascending=False).head(10)[['term']].values
+    st.write(top10)
+
+    st.write("""Based on these loadings and the speech contexts, we theorize a gloss for principal component 0 as "conversational" to "formal" (from left to right), and a gloss for PC1 of "extemporanous" to "rehearsed" (top to bottom).""")
+
     st.write("""## HCA dendrogram
 
 Here we evaluate the similarity of the speeches using Hierarchical Cluster Analysis, which maps the speeches into a "family tree" where similar speeches are closely related. We use cosine similarity as the metric, and select the 4 highest-level clusters.
@@ -73,3 +101,5 @@ Although their methods are different, PCA and HCA produce similar clusters of sp
     st.write("""This sheds some light on the broad cluster of speeches in the top center. When we look at the individual speeches, the yellow speeches (group 3) are mostly interviews, involving dialog and a more conversational register.
 
 The purple speeches (group 1) are mostly Biden speeches, along with some major public appearances for Trump (SOTU, RNC, 4th of July, 60 minutes). We suggest that this group represents a more formal, "presidential" style of speech.""")
+
+
