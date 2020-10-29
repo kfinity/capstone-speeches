@@ -28,7 +28,7 @@ def write():
     
     In our initial assessment of data sources, we realized that there were not 
     any data sources that had aggregated campaign speeches into a single 
-    repository. Some sights had posted transcripts of extremely high profile 
+    repository. Some sites had posted transcripts of extremely high profile 
     speeches, with supplementary analysis, but nobody was posting transcripts 
     for the smaller, daily stops of the campaign trail. We needed access to 
     more data in order to conduct a thorough exploration of the data.
@@ -60,7 +60,7 @@ def write():
     st.write("""
     ### Metadata
     
-    The JSON file includes a variety of metadata, including:
+    The YouTube JSON format includes a variety of metadata, including:
         
     - title
     - channel

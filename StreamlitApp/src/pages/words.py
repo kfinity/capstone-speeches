@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 import streamlit.components.v1 as components
-
+from PIL import Image
 from IPython.core.display import display, HTML
 
 def import_speeches():
@@ -39,8 +39,37 @@ def write():
     
     st.write(top10)
 
-    st.write("## PCA")
+    st.write("""## PCA
+
+Principal Components Analysis organizes the data along the dimensions of highest variance. Often, this reveals underlying patterns in the data.
+
+For this visualization, we look at the first 2 principal components for the unigram TF-IDF of the speeches. Two notable clusters emerge: Trump rallies in the lower left, and Pence speeches in the lower right. Tight clusters indicate that the speeches have low lexical variation - they have a very consistent style, reusing the same words and phrases, which makes them easily characterized.
+
+By contrast, the Biden and Harris speeches have a wide spread, as do the Trump interviews and public appearances. This represents a more complex and diverse pattern of word usage.
+    """)
+
     with open('data/pca1.html','r') as pca1:
         pca1_str = pca1.read()
         components.html(pca1_str, height=500)
+
+    st.write("""## HCA dendrogram
+
+Here we evaluate the similarity of the speeches using Hierarchical Cluster Analysis, which maps the speeches into a "family tree" where similar speeches are closely related. We use cosine similarity as the metric, and select the 4 highest-level clusters.
+""")
+
+    dendrogram = Image.open('data/dendrogram.png')
+    st.image(dendrogram, use_column_width=True)
+
+
+    st.write("""### Characterizing the HCA groups
+
+Although their methods are different, PCA and HCA produce similar clusters of speeches. Here, we color the PCA plot using the 4 top clusters from the HCA grouping.
+    """)
+
+    with open('data/pca1_groups.html','r') as pca1g:
+        pca1g_str = pca1g.read()
+        components.html(pca1g_str, height=500)
     
+    st.write("""This sheds some light on the broad cluster of speeches in the top center. When we look at the individual speeches, the yellow speeches (group 3) are mostly interviews, involving dialog and a more conversational register.
+
+The purple speeches (group 1) are mostly Biden speeches, along with some major public appearances for Trump (SOTU, RNC, 4th of July, 60 minutes). We suggest that this group represents a more formal, "presidential" style of speech.""")
