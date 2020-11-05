@@ -136,16 +136,3 @@ def write():
     of these topics are extremely similar. His first, second, and fourth topics all 
     overlap each other, and they all focus Donald Trump vs. Joe Biden.
     """)
-    
-    
-    def get_table_download_link(df):
-        """Generates a link allowing the data in a given panda dataframe to be downloaded
-        in:  json
-        out: href string
-        """
-        csv = df.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-        href = f'<a href="data:file/csv;base64,{b64}">Download speeches data as csv</a>'
-        return href
-        
-    st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
