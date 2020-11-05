@@ -7,6 +7,7 @@ import seaborn as sns
 from IPython.core.display import display, HTML
 sns.set()
 from PIL import Image
+import base64
 
 
 def import_speeches():
@@ -18,6 +19,18 @@ def import_speeches():
 #bow = load_bow()
 speech = import_speeches()
 #data_load_state.text('Loading data...done!')
+
+def get_table_download_link(df):
+    """Generates a link allowing the data in a given panda dataframe to be downloaded
+    in:  json
+    out: href string
+        """
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download speeches data as csv</a>'
+    return href
+        
+st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
 
 def write():
     
@@ -72,7 +85,11 @@ def write():
     - dislikecount
     - viewcount
 
+    The raw JSON file, as well as a custom preprocessing library, and all scripts
+    used in our analysis, can be found at the github linked in the left toolbar.
+
     """)
+
 
     st.subheader('Speech library')
     st.write(speech[["id","speaker","date","title","transcript_type"]])
