@@ -55,6 +55,13 @@ By contrast, the Biden and Harris speeches have a wide spread, as do the Trump i
         pca1_str = pca1.read()
         components.html(pca1_str, height=500)
 
+    st.write("""
+The PCA graph also lends credence to the theory presented in the "Summary" tab about the different roles
+of the VP candidates. Donald Trump and Mike Pence's speeches are clearly sectioned off. Kamala Harris' speeches,
+on the other hand, do have some overlap with Biden speeches, and even Trump speeches. For the most part though,
+they do seem to be concentrated in the positive side of principal component 0, the same side where Mike Pence's speeches are located.
+     """)
+
     st.write("""### PCA Loadings
 
 The *loadings* for the principal components show us how much each term contributes to the vector. So we can look at the top words associated with different directions in the PCA plot.""")
