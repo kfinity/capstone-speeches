@@ -20,19 +20,21 @@ def import_speeches():
 speech = import_speeches()
 #data_load_state.text('Loading data...done!')
 
-def get_table_download_link(df):
-    """Generates a link allowing the data in a given panda dataframe to be downloaded
-    in:  json
-    out: href string
-        """
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download speeches data as csv</a>'
-    return href
-        
-st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
+    
 
 def write():
+    
+    def get_table_download_link(df):
+        """Generates a link allowing the data in a given panda dataframe to be downloaded
+        in:  json
+        out: href string
+            """
+        csv = df.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+        href = f'<a href="data:file/csv;base64,{b64}">Download speeches data as csv</a>'
+        return href
+            
+    st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
     
     st.write("""
     # US Presidential Election Campaign Speeches
