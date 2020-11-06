@@ -27,7 +27,7 @@ def main():
         udisp.render_page(menu)
 
     st.sidebar.info(
-        "https://github.com/kfinity/capstone-speeches"
+        "[Github](https://github.com/kfinity/capstone-speeches)"
     )
     st.sidebar.markdown(
         """

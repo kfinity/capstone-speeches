@@ -34,33 +34,33 @@ def write():
         href = f'<a href="data:file/csv;base64,{b64}">Download speeches data as csv</a>'
         return href
             
-    st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
+    #st.markdown(get_table_download_link(speech), unsafe_allow_html=True)
     
     st.write("""
-    # US Presidential Election Campaign Speeches
+# US Presidential Election Campaign Speeches
 
-    ## The Data
-    
-    In our initial assessment of data sources, we realized that there were not 
-    any data sources that had aggregated campaign speeches into a single 
-    repository. Some sites had posted transcripts of extremely high profile 
-    speeches, with supplementary analysis, but nobody was posting transcripts 
-    for the smaller, daily stops of the campaign trail. We needed access to 
-    more data in order to conduct a thorough exploration of the data.
-    
-    To get around this, we decided to create a scraper that would capture 
-    speeches, interviews, and debates using YouTube's API. In one API call, we 
-    would search for speeches made by any candidates on that specific day that 
-    were over 20 minutes (in order to avoid search results such as clips or 
-    news stories). In the second API call, we would then write the automated 
-    video captions and any associated metadata into a JSON file. By having all 
-    of our speeches coming from the same site, we had the advantage of 
-    everything being formatted in a similar manner.
-    
-    As these are video captions and not true transcripts, the structure is a 
-    bit unusual. Each caption appears as its own line (as it would in the 
-    video), with an associated start time and duration, representing when that 
-    caption appeared in the video. See examples below.
+## The Data
+
+In our initial assessment of data sources, we realized that there were not 
+any data sources that had aggregated campaign speeches into a single 
+repository. Some sites had posted transcripts of extremely high profile 
+speeches, with supplementary analysis, but nobody was posting transcripts 
+for the smaller, daily stops of the campaign trail. We needed access to 
+more data in order to conduct a thorough exploration of the data.
+
+To get around this, we decided to create a scraper that would capture 
+speeches, interviews, and debates using YouTube's API. In one API call, we 
+would search for speeches made by any candidates on that specific day that 
+were over 20 minutes (in order to avoid search results such as clips or 
+news stories). In the second API call, we would then write the automated 
+video captions and any associated metadata into a JSON file. By having all 
+of our speeches coming from the same site, we had the advantage of 
+everything being formatted in a similar manner.
+
+As these are video captions and not true transcripts, the structure is a 
+bit unusual. Each caption appears as its own line (as it would in the 
+video), with an associated start time and duration, representing when that 
+caption appeared in the video. See examples below.
 
     """)
 
@@ -71,24 +71,32 @@ def write():
     st.image(image2, caption='Captions as they appear in videos',
              use_column_width=True)
     
+    st.write("""
+### Files
+
+ - [speeches.json](https://github.com/kfinity/capstone-speeches/raw/master/speeches.json) (raw YouTube transcripts)
+ - [speeches.csv](https://github.com/kfinity/capstone-speeches/raw/master/data/speeches.csv) (all speeches and transcripts, no timestamps)
+ - [tfidf_speaker.csv](https://github.com/kfinity/capstone-speeches/raw/master/data/tfidf_speaker.csv) (TF-IDF aggregate by speaker)
+ - [sentiment.csv](https://github.com/kfinity/capstone-speeches/raw/master/data/sentiment.csv) (SALEX emotion scores)
+ """)
     
     st.write("""
-    ### Metadata
-    
-    The YouTube JSON format includes a variety of metadata, including:
-        
-    - title
-    - channel
-    - description
-    - publishedAt (date)
-    - tags
-    - commnetcount
-    - likecount
-    - dislikecount
-    - viewcount
+### Metadata
 
-    The raw JSON file, as well as a custom preprocessing library, and all scripts
-    used in our analysis, can be found at the github linked in the left toolbar.
+The YouTube JSON format includes a variety of metadata, including:
+    
+- title
+- channel
+- description
+- publishedAt (date)
+- tags
+- commnetcount
+- likecount
+- dislikecount
+- viewcount
+
+The raw JSON file, as well as a custom preprocessing library, and all scripts
+used in our analysis, can be found at the github linked in the left toolbar.
 
     """)
 
