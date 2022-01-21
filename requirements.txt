@@ -3,5 +3,5 @@ seaborn==0.10.1
 pandas==1.0.5
 matplotlib==3.2.2
 numpy==1.18.5
-ipython==7.16.1
+ipython==7.16.3
 Pillow==8.0.1
